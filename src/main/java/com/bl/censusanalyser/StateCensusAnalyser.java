@@ -20,8 +20,8 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCensus(csvFilePath);
 			checkDelimiter(csvFilePath, 4);
-			Iterator<CSVStateCensus> stateCensusIterator = new OpenCsvBuilder().getCsvFileIterator(reader,
-					CSVStateCensus.class);
+			Iterator<CSVStateCensus> stateCensusIterator = CSVBuilderFactory.createCSVBuilder()
+					.getCsvFileIterator(reader, CSVStateCensus.class);
 			return getCount(stateCensusIterator);
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
@@ -40,7 +40,7 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCode(csvFilePath);
 			checkDelimiter(csvFilePath, 2);
-			Iterator<CSVStateCode> stateCodeIterator = new OpenCsvBuilder().getCsvFileIterator(reader,
+			Iterator<CSVStateCode> stateCodeIterator = CSVBuilderFactory.createCSVBuilder().getCsvFileIterator(reader,
 					CSVStateCode.class);
 			return getCount(stateCodeIterator);
 		} catch (IOException e) {
