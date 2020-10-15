@@ -16,9 +16,7 @@ public class StateCensusAnalyser {
 
 	public int loadStatesCSVData(String csvFilePath) throws CensusAnalyserException {
 		int noOfStates = 0;
-
 		String[] file = csvFilePath.split("[.]");
-
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			if (!file[1].equals("csv")) {
 				throw new CensusAnalyserException("Wrong File type",
@@ -40,7 +38,6 @@ public class StateCensusAnalyser {
 
 	public int loadStateCodeData(String csvFilePath) throws CensusAnalyserException {
 		int noOfStates = 0;
-
 		String[] file = csvFilePath.split("[.]");
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			if (!file[1].equals("csv")) {
