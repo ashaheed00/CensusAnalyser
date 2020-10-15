@@ -5,9 +5,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-
 public class StateCensusAnalyser {
 
 	public StateCensusAnalyser() {
@@ -23,7 +20,8 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCensus(csvFilePath);
 			checkDelimiter(csvFilePath, 4);
-			Iterator<CSVStateCensus> stateCensusIterator = getCsvFileIterator(reader, CSVStateCensus.class);
+			Iterator<CSVStateCensus> stateCensusIterator = new OpenCsvBuilder().getCsvFileIterator(reader,
+					CSVStateCensus.class);
 			return getCount(stateCensusIterator);
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
@@ -42,22 +40,12 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCode(csvFilePath);
 			checkDelimiter(csvFilePath, 2);
-			Iterator<CSVStateCode> stateCodeIterator = getCsvFileIterator(reader, CSVStateCode.class);
+			Iterator<CSVStateCode> stateCodeIterator = new OpenCsvBuilder().getCsvFileIterator(reader,
+					CSVStateCode.class);
 			return getCount(stateCodeIterator);
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
 					CensusAnalyserException.ExceptionType.WRONG_CSV_FILE);
-		}
-	}
-
-	private <E> Iterator<E> getCsvFileIterator(Reader reader, Class csvCLass) throws CensusAnalyserException {
-		try {
-			CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-			csvToBeanBuilder.withType(csvCLass).withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<E> csvToBean = csvToBeanBuilder.build();
-			return csvToBean.iterator();
-		} catch (IllegalStateException e) {
-			throw new CensusAnalyserException("Wrong File type", CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE);
 		}
 	}
 
