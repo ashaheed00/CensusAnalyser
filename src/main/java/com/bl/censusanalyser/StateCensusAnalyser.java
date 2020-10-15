@@ -48,23 +48,24 @@ public class StateCensusAnalyser {
 	private void checkDelimiterHeader(String csvFilePath) throws CensusAnalyserException {
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			String header = reader.readLine();
-			String[] columnsForGivenDelimeter = header.split(",");
-			if (columnsForGivenDelimeter.length < 4) {
-				throw new CensusAnalyserException("Invalid delimiter",
-						CensusAnalyserException.ExceptionType.WRONG_DELIMITER);
-			}
-			boolean isRightHeaders = columnsForGivenDelimeter[0].equals("State")
-					&& columnsForGivenDelimeter[1].equals("Population")
-					&& columnsForGivenDelimeter[2].equals("AreaInSqKm")
-					&& columnsForGivenDelimeter[3].equals("DensityPerSqKm");
+			String[] columnsForGivenHeader = header.split(",");
+			boolean isRightHeaders = columnsForGivenHeader[0].equals("State")
+					&& columnsForGivenHeader[1].equals("Population") && columnsForGivenHeader[2].equals("AreaInSqKm")
+					&& columnsForGivenHeader[3].equals("DensityPerSqKm");
 			if (!isRightHeaders) {
 				throw new CensusAnalyserException("Invalid CSV header",
 						CensusAnalyserException.ExceptionType.WRONG_HEADER);
 			}
+			while (true) {
+				String line = reader.readLine();
+				String[] columnsForGivenDelimeter = line.split(",");
+				if (columnsForGivenDelimeter.length < 4) {
+					throw new CensusAnalyserException("Invalid delimiter",
+							CensusAnalyserException.ExceptionType.WRONG_DELIMITER);
+				}
+			}
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException | NullPointerException e) {
 		}
 	}
 }

@@ -8,6 +8,7 @@ public class StateCensusAnalyserTest {
 	private static final String STATE_CENSUS_CSV_FILE_PATH = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/StateCensus.csv";
 	private static final String WRONG_CSV_FILE_PATH = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/State.csv";
 	private static final String WRONG_FILE_TYPE = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/try.txt";
+	private static final String WRONG_CSV_DELIMITER = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/StateCensusWithWrongDelimiter.csv";
 	private static final String WRONG_CSV_HEADER = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/StateCensusWithWrongHeader.csv";
 
 	// TC1.1
@@ -41,6 +42,17 @@ public class StateCensusAnalyserTest {
 	}
 
 	// TC1.4
+	@Test
+	public void givenStateCensusCSVFile_WhenIncorrectDelimiter_ShouldThrowException() {
+		try {
+			StateCensusAnalyser censusAnalyzer = new StateCensusAnalyser();
+			censusAnalyzer.loadStatesCSVData(WRONG_CSV_DELIMITER);
+		} catch (CensusAnalyserException e) {
+			assertEquals(CensusAnalyserException.ExceptionType.WRONG_DELIMITER, e.getExceptionType());
+		}
+	}
+
+	// TC1.5
 	@Test
 	public void givenStateCensusCSVFile_WhenIncorrectHeader_ShouldThrowException() {
 		try {
