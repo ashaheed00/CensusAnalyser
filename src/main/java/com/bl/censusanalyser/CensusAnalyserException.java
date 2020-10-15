@@ -6,14 +6,18 @@ public class CensusAnalyserException extends Exception {
 		WRONG_CSV_FILE, WRONG_FILE_TYPE, WRONG_DELIMITER, WRONG_HEADER
 	}
 
-	private ExceptionType exception;
+	private ExceptionType exceptionType;
+
+	public ExceptionType getExceptionType() {
+		return exceptionType;
+	}
 
 	public CensusAnalyserException(ExceptionType exception) {
-		this.exception = exception;
+		this.exceptionType = exception;
 	}
 
 	public CensusAnalyserException(String message, ExceptionType exception) {
-		this.exception = exception;
+		this.exceptionType = exception;
 	}
 
 }
