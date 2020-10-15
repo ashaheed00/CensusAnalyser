@@ -26,13 +26,9 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCensus(csvFilePath);
 			checkDelimiter(csvFilePath, 4);
-			CsvToBeanBuilder<CSVStateCensus> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-			csvToBeanBuilder.withType(CSVStateCensus.class).withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<CSVStateCensus> csvToBean = csvToBeanBuilder.build();
-			Iterator<CSVStateCensus> censusCSVIterator = csvToBean.iterator();
-			Iterable<CSVStateCensus> iterable = () -> censusCSVIterator;
+			Iterator<CSVStateCensus> stateCensusIterator = getCsvFileIterator(reader, CSVStateCensus.class);
+			Iterable<CSVStateCensus> iterable = () -> stateCensusIterator;
 			noOfStates = (int) StreamSupport.stream(iterable.spliterator(), false).count();
-
 			return noOfStates;
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
@@ -46,7 +42,6 @@ public class StateCensusAnalyser {
 		int noOfStates = 0;
 
 		String[] file = csvFilePath.split("[.]");
-
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			if (!file[1].equals("csv")) {
 				throw new CensusAnalyserException("Wrong File type",
@@ -54,19 +49,24 @@ public class StateCensusAnalyser {
 			}
 			checkHeaderStateCode(csvFilePath);
 			checkDelimiter(csvFilePath, 2);
-			CsvToBeanBuilder<CSVStateCode> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-			csvToBeanBuilder.withType(CSVStateCode.class).withIgnoreLeadingWhiteSpace(true);
-			CsvToBean<CSVStateCode> csvToBean = csvToBeanBuilder.build();
-			Iterator<CSVStateCode> stateCodeIterator = csvToBean.iterator();
+			Iterator<CSVStateCode> stateCodeIterator = getCsvFileIterator(reader, CSVStateCode.class);
 			Iterable<CSVStateCode> iterable = () -> stateCodeIterator;
 			noOfStates = (int) StreamSupport.stream(iterable.spliterator(), false).count();
-
 			return noOfStates;
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
 					CensusAnalyserException.ExceptionType.WRONG_CSV_FILE);
+		}
+	}
+
+	private <E> Iterator<E> getCsvFileIterator(Reader reader, Class csvCLass) throws CensusAnalyserException {
+		try {
+			CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+			csvToBeanBuilder.withType(csvCLass).withIgnoreLeadingWhiteSpace(true);
+			CsvToBean<E> csvToBean = csvToBeanBuilder.build();
+			return csvToBean.iterator();
 		} catch (IllegalStateException e) {
-			throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE);
+			throw new CensusAnalyserException("Wrong File type", CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE);
 		}
 	}
 
