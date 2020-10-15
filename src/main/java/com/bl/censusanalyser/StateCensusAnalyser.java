@@ -15,7 +15,6 @@ public class StateCensusAnalyser {
 	}
 
 	public int loadStatesCSVData(String csvFilePath) throws CensusAnalyserException {
-		int noOfStates = 0;
 		String[] file = csvFilePath.split("[.]");
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			if (!file[1].equals("csv")) {
@@ -25,9 +24,7 @@ public class StateCensusAnalyser {
 			checkHeaderStateCensus(csvFilePath);
 			checkDelimiter(csvFilePath, 4);
 			Iterator<CSVStateCensus> stateCensusIterator = getCsvFileIterator(reader, CSVStateCensus.class);
-			Iterable<CSVStateCensus> iterable = () -> stateCensusIterator;
-			noOfStates = (int) StreamSupport.stream(iterable.spliterator(), false).count();
-			return noOfStates;
+			return getCount(stateCensusIterator);
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
 					CensusAnalyserException.ExceptionType.WRONG_CSV_FILE);
@@ -37,7 +34,6 @@ public class StateCensusAnalyser {
 	}
 
 	public int loadStateCodeData(String csvFilePath) throws CensusAnalyserException {
-		int noOfStates = 0;
 		String[] file = csvFilePath.split("[.]");
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 			if (!file[1].equals("csv")) {
@@ -47,9 +43,7 @@ public class StateCensusAnalyser {
 			checkHeaderStateCode(csvFilePath);
 			checkDelimiter(csvFilePath, 2);
 			Iterator<CSVStateCode> stateCodeIterator = getCsvFileIterator(reader, CSVStateCode.class);
-			Iterable<CSVStateCode> iterable = () -> stateCodeIterator;
-			noOfStates = (int) StreamSupport.stream(iterable.spliterator(), false).count();
-			return noOfStates;
+			return getCount(stateCodeIterator);
 		} catch (IOException e) {
 			throw new CensusAnalyserException("Incorrect csv file path",
 					CensusAnalyserException.ExceptionType.WRONG_CSV_FILE);
@@ -65,6 +59,11 @@ public class StateCensusAnalyser {
 		} catch (IllegalStateException e) {
 			throw new CensusAnalyserException("Wrong File type", CensusAnalyserException.ExceptionType.WRONG_FILE_TYPE);
 		}
+	}
+
+	private <E> int getCount(Iterator<E> iterator) {
+		Iterable<E> iterable = () -> iterator;
+		return (int) StreamSupport.stream(iterable.spliterator(), false).count();
 	}
 
 	private void checkHeaderStateCensus(String csvFilePath) throws CensusAnalyserException {
