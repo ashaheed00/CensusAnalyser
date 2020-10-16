@@ -3,9 +3,11 @@ package com.bl.censusanalyser;
 import com.opencsv.bean.CsvBindByName;
 
 public class CSVStateCode {
-	@CsvBindByName(column = "State")
+
+	@CsvBindByName(column = "State", required = true)
 	private String state;
-	@CsvBindByName(column = "State Code")
+
+	@CsvBindByName(column = "State Code", required = true)
 	private String stateCode;
 
 	@Override
