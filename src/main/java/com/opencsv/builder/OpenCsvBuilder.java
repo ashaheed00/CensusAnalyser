@@ -1,4 +1,4 @@
-package com.bl.censusanalyser;
+package com.opencsv.builder;
 
 import java.io.Reader;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ public class OpenCsvBuilder<E> implements ICSVBuilder {
 			CsvToBean<E> csvToBean = csvToBeanBuilder.build();
 			return csvToBean.iterator();
 		} catch (IllegalStateException e) {
-			throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
+			throw new CSVException("Wrong File type", CSVException.ExceptionType.UNABLE_TO_PARSE);
 		}
 	}
 }

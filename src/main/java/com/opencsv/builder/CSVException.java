@@ -1,9 +1,9 @@
-package com.bl.censusanalyser;
+package com.opencsv.builder;
 
 public class CSVException extends Exception {
 
-	enum ExceptionType {
-		WRONG_CSV_FILE, WRONG_FILE_TYPE, WRONG_DELIMITER, CSV_FILE_INTERNAL_ISSUES
+	public enum ExceptionType {
+		WRONG_CSV_FILE, WRONG_FILE_TYPE, UNABLE_TO_PARSE, CSV_FILE_INTERNAL_ISSUES
 	}
 
 	private ExceptionType exceptionType;
