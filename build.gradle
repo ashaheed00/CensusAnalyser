@@ -26,5 +26,6 @@ dependencies {
    	
    	compile files('C:/Users/user/eclipse-workspace/CensusAnalyser/opencsv-builder.jar')
    	
+   	compile files('C:/Users/user/eclipse-workspace/CensusAnalyser/commonscsv-builder.jar')
     
 }
