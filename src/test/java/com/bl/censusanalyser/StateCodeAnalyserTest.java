@@ -7,7 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.opencsv.builder.CSVException;
+//import com.opencsv.builder.CSVException;
+import com.commonscsv.builder.CSVException;
 
 public class StateCodeAnalyserTest {
 	private static final String STATE_CENSUS_CSV_FILE_PATH = "C:/Users/user/eclipse-workspace/CensusAnalyser/CSVfiles/StateCode.csv";
@@ -57,7 +58,7 @@ public class StateCodeAnalyserTest {
 			stateCensusAnalyser.loadStateCodeData(WRONG_CSV_DELIMITER);
 			thrown.expect(CSVException.class);
 		} catch (CSVException e) {
-			assertEquals(CSVException.ExceptionType.CSV_FILE_INTERNAL_ISSUES, e.getExceptionType());
+			assertEquals(CSVException.ExceptionType.WRONG_CSV_DELIMITER, e.getExceptionType());
 		}
 	}
 
@@ -67,7 +68,7 @@ public class StateCodeAnalyserTest {
 			stateCensusAnalyser.loadStateCodeData(WRONG_CSV_HEADER);
 			thrown.expect(CSVException.class);
 		} catch (CSVException e) {
-			assertEquals(CSVException.ExceptionType.CSV_FILE_INTERNAL_ISSUES, e.getExceptionType());
+			assertEquals(CSVException.ExceptionType.WRONG_CSV_HEADER, e.getExceptionType());
 		}
 	}
 }

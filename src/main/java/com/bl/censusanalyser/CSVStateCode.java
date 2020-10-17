@@ -5,10 +5,10 @@ import com.opencsv.bean.CsvBindByName;
 public class CSVStateCode {
 
 	@CsvBindByName(column = "State", required = true)
-	private String state;
+	public String state;
 
 	@CsvBindByName(column = "State Code", required = true)
-	private String stateCode;
+	public String stateCode;
 
 	@Override
 	public String toString() {
