@@ -5,6 +5,8 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import com.opencsv.builder.CSVBuilderFactory;
+import com.opencsv.builder.CSVException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class StateCensusAnalyser {
@@ -19,9 +21,9 @@ public class StateCensusAnalyser {
 			if (!file[1].equals("csv")) {
 				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
 			}
-			Iterator<CSVStateCensus> stateCensusIterator = CSVBuilderFactory.createCSVBuilder()
-					.getCsvFileIterator(reader, CSVStateCensus.class);
-			return getCount(stateCensusIterator);
+			List<CSVStateCensus> stateCensusList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
+					CSVStateCensus.class);
+			return stateCensusList.size();
 		} catch (IOException e) {
 			throw new CSVException("Incorrect csv file path", CSVException.ExceptionType.WRONG_CSV_FILE);
 
@@ -39,9 +41,9 @@ public class StateCensusAnalyser {
 			if (!file[1].equals("csv")) {
 				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
 			}
-			Iterator<CSVStateCode> stateCodeIterator = CSVBuilderFactory.createCSVBuilder().getCsvFileIterator(reader,
+			List<CSVStateCode> stateCodeList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
 					CSVStateCode.class);
-			return getCount(stateCodeIterator);
+			return stateCodeList.size();
 		} catch (IOException e) {
 			throw new CSVException("Incorrect csv file path", CSVException.ExceptionType.WRONG_CSV_FILE);
 		} catch (RuntimeException e) {
@@ -51,10 +53,4 @@ public class StateCensusAnalyser {
 				return 0;
 		}
 	}
-
-	private <E> int getCount(Iterator<E> iterator) {
-		Iterable<E> iterable = () -> iterator;
-		return (int) StreamSupport.stream(iterable.spliterator(), false).count();
-	}
-
 }
