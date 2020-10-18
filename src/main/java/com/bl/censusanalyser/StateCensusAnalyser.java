@@ -12,6 +12,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class StateCensusAnalyser {
 	private List<CSVStateCensus> stateCensusList;
+	private List<CSVStateCode> stateCodeList;
 
 	public StateCensusAnalyser() {
 
@@ -38,7 +39,7 @@ public class StateCensusAnalyser {
 			if (!file[1].equals("csv")) {
 				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
 			}
-			List<CSVStateCode> stateCodeList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
+			stateCodeList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
 					CSVStateCode.class);
 			return stateCodeList.size();
 		} catch (IOException e) {
@@ -54,5 +55,13 @@ public class StateCensusAnalyser {
 			throw new CSVException("No Census data found", CSVException.ExceptionType.NO_CENSUS_DATA);
 		Collections.sort(stateCensusList, Comparator.comparing(census -> census.state));
 		return new Gson().toJson(stateCensusList);
+	}
+
+	public String sortStateCodeDataByStateCode(String csvFilePath) throws CSVException {
+		loadStateCodeData(csvFilePath);
+		if (stateCodeList == null || stateCodeList.size() == 0)
+			throw new CSVException("No Census data found", CSVException.ExceptionType.NO_CENSUS_DATA);
+		Collections.sort(stateCodeList, Comparator.comparing(census -> census.stateCode));
+		return new Gson().toJson(stateCodeList);
 	}
 }

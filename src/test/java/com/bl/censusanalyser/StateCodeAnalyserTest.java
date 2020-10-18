@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.gson.Gson;
 import com.opencsv.builder.CSVException;
 
 public class StateCodeAnalyserTest {
@@ -69,5 +70,14 @@ public class StateCodeAnalyserTest {
 		} catch (CSVException e) {
 			assertEquals(CSVException.ExceptionType.CSV_FILE_INTERNAL_ISSUES, e.getExceptionType());
 		}
+	}
+
+	@Test
+	public void givenStateCensusCSVFile_WhenSortedOnState_ShouldReturnSortedResult() throws CSVException {
+		String sortedCensusDataByStateCode = stateCensusAnalyser
+				.sortStateCodeDataByStateCode(STATE_CENSUS_CSV_FILE_PATH);
+		CSVStateCode[] csvStateCode = new Gson().fromJson(sortedCensusDataByStateCode, CSVStateCode[].class);
+		assertEquals("AD", csvStateCode[0].stateCode);
+		assertEquals("WB", csvStateCode[csvStateCode.length - 1].stateCode);
 	}
 }
