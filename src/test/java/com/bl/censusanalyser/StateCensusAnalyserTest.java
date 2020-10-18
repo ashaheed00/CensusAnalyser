@@ -82,4 +82,13 @@ public class StateCensusAnalyserTest {
 		assertEquals("Andhra Pradesh", csvStateCensus[0].state);
 		assertEquals("West Bengal", csvStateCensus[csvStateCensus.length - 1].state);
 	}
+
+	@Test
+	public void givenStateCensusCSVFile_WhenSortedOnPopulation_ShouldReturnSortedResult() throws CSVException {
+		String sortedCensusDataByPopulation = stateCensusAnalyser
+				.sortCensusDataByPopulation(STATE_CENSUS_CSV_FILE_PATH);
+		CSVStateCensus[] csvStateCensus = new Gson().fromJson(sortedCensusDataByPopulation, CSVStateCensus[].class);
+		assertEquals("Uttar Pradesh", csvStateCensus[0].state);
+		assertEquals("Sikkim", csvStateCensus[csvStateCensus.length - 1].state);
+	}
 }
