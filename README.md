@@ -1,3 +1,3 @@
 # Census Analyzer BridgeLabz
-## Version UC2
-#### Load State Code Data from CSV files and use Test cases to check for exceptions
+## Version UC3
+#### State Census Data in a Json Format according to State alphabetical order
