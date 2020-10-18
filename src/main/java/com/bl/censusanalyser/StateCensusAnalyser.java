@@ -81,4 +81,14 @@ public class StateCensusAnalyser {
 		Collections.reverse(stateCensusList);
 		return new Gson().toJson(stateCensusList);
 	}
+
+	public String sortCensusDataByArea(String csvFilePath) throws CSVException {
+		loadStatesCSVData(csvFilePath);
+		if (stateCensusList == null || stateCensusList.size() == 0)
+			throw new CSVException("No Census data found", CSVException.ExceptionType.NO_CENSUS_DATA);
+		Collections.sort(stateCensusList, Comparator.comparing(census -> census.areaInSqKm));
+		Collections.reverse(stateCensusList);
+		return new Gson().toJson(stateCensusList);
+	}
+
 }
