@@ -11,6 +11,7 @@ import com.opencsv.builder.CSVException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class StateCensusAnalyser {
+	private List<CSVStateCensus> stateCensusList;
 
 	public StateCensusAnalyser() {
 
@@ -22,8 +23,7 @@ public class StateCensusAnalyser {
 			if (!file[1].equals("csv")) {
 				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
 			}
-			List<CSVStateCensus> stateCensusList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
-					CSVStateCensus.class);
+			stateCensusList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader, CSVStateCensus.class);
 			return stateCensusList.size();
 		} catch (IOException e) {
 			throw new CSVException("Incorrect csv file path", CSVException.ExceptionType.WRONG_CSV_FILE);
@@ -49,20 +49,10 @@ public class StateCensusAnalyser {
 	}
 
 	public String sortCensusDataByState(String csvFilePath) throws CSVException {
-		String[] file = csvFilePath.split("[.]");
-		try (BufferedReader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-			if (!file[1].equals("csv")) {
-				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
-			}
-			List<CSVStateCensus> stateCensusList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
-					CSVStateCensus.class);
-			Collections.sort(stateCensusList, Comparator.comparing(census -> census.state));
-
-			return new Gson().toJson(stateCensusList);
-		} catch (IOException e) {
-			throw new CSVException("Incorrect csv file path", CSVException.ExceptionType.WRONG_CSV_FILE);
-		} catch (RuntimeException e) {
-			throw new CSVException(e.getCause().getMessage(), CSVException.ExceptionType.CSV_FILE_INTERNAL_ISSUES);
-		}
+		loadStatesCSVData(csvFilePath);
+		if (stateCensusList == null || stateCensusList.size() == 0)
+			throw new CSVException("No Census data found", CSVException.ExceptionType.NO_CENSUS_DATA);
+		Collections.sort(stateCensusList, Comparator.comparing(census -> census.state));
+		return new Gson().toJson(stateCensusList);
 	}
 }
