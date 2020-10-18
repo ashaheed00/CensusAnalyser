@@ -39,8 +39,7 @@ public class StateCensusAnalyser {
 			if (!file[1].equals("csv")) {
 				throw new CSVException("Wrong File type", CSVException.ExceptionType.WRONG_FILE_TYPE);
 			}
-			stateCodeList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader,
-					CSVStateCode.class);
+			stateCodeList = CSVBuilderFactory.createCSVBuilder().getCsvFileList(reader, CSVStateCode.class);
 			return stateCodeList.size();
 		} catch (IOException e) {
 			throw new CSVException("Incorrect csv file path", CSVException.ExceptionType.WRONG_CSV_FILE);
@@ -64,4 +63,5 @@ public class StateCensusAnalyser {
 		Collections.sort(stateCodeList, Comparator.comparing(census -> census.stateCode));
 		return new Gson().toJson(stateCodeList);
 	}
+
 }

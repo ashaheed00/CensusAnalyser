@@ -2,6 +2,9 @@ package com.bl.censusanalyser;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
